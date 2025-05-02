@@ -53,23 +53,24 @@ def get_post(id: int,db: Session = Depends(get_db), user_id :int = Depends(outh2
 
 
 
-# @router.put("/posts/{id}")
-# def update_post(id:int,post:schema.PostCreate):
-     
-#     cursor.execute("""UPDATE posts SET title = %s, content = %s, publisher = %s WHERE id = %s RETURNING * """,(post.title,post.content,post.publisher,str(id)))
-#     updated_post = cursor.fetchone()
-#     conn.commit()
-#     if updated_post ==None:                    
-#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"your post with {id} does not found")
-#     return updated_post
+@router.put("/{id}", response_model = schema.Post)
+def update_post(id:int,updated_post:schema.PostCreate, db: Session = Depends(get_db), current_user :int = Depends(outh2.get_current_user)):
+    post_query = db.query(models.Post).filter(models.Post.id == id)
+    post = post_query.first()
+    if post == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"your post with {id} does not found")
+    if post.owner_id != current_user.id:
+        raise HTTPException(status_code= status.HTTP_403_FORBIDDEN, detail = "NOT ATHORISHED TO UPDATE THIS")  
 
+    post_query.update(updated_post.dict(), synchronize_session=False)
+    db.commit()
+    return post_query.first()
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_post(id:int,db: Session = Depends(get_db), current_user :int = Depends(outh2.get_current_user)):
     post = db.query(models.Post).filter(models.Post.id == id)
     deleted_post = post.first()
-    print(post.__dict__)
 
     if deleted_post == None:
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"your post with {id} does not found")

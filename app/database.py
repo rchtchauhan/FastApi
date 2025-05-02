@@ -6,7 +6,6 @@ from .config import setting
 
 encoded_password = quote_plus(setting.DATABASE_PASSWORD)
 
-# SQLALCHEMY_DATABASE_URL = f"postgresql://{encoded_password}:{setting.DATABASE_PASSWORD}@{setting.DATABASE_HOSTNAME}:{setting.DATABASE_PORT}/{setting.DATABASE_NAME}"
 SQLALCHEMY_DATABASE_URL = f"postgresql://{setting.DATABASE_USERNAME}:{encoded_password}@{setting.DATABASE_HOSTNAME}:{setting.DATABASE_PORT}/{setting.DATABASE_NAME}"
 
 

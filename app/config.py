@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     DATABASE_USERNAME : str
     DATABASE_NAME : str
     SECRET_KEY : str
-    ACCESS_TOKEN_EXPIRE_TIME : str
+    ACCESS_TOKEN_EXPIRE_TIME : int
     ALGORITHM : str
 
     class Config:

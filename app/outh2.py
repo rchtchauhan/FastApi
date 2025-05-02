@@ -3,14 +3,15 @@ from datetime import datetime, timedelta
 from . import schema
 from fastapi import Depends, status, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from .config import Settings
+from .config import setting
 outh2_scheme = OAuth2PasswordBearer(tokenUrl='login')
 #ALGORITHMS
 #Expireation time
 
-SECRET_KEY = '95u2hhggg2ovi2j292u205u295259258205252vjgjgiwjjjjIJFIJ'
-ALGORITHM = 'HS256'
-ACCESS_TOKEN_EXPIRE_TIME = 60
+SECRET_KEY = setting.SECRET_KEY
+ALGORITHM = setting.ALGORITHM
+ACCESS_TOKEN_EXPIRE_TIME = setting.ACCESS_TOKEN_EXPIRE_TIME
+
 
 # to create token we need three things ---> what we will encode, secretkey , algorithms
 
